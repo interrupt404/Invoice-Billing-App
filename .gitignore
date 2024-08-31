@@ -16,6 +16,11 @@ web-build/
 *.key
 *.mobileprovision
 
+# Android build artifacts
+/android/app/build/
+/android/.gradle/
+/android/build/
+
 # Metro
 .metro-health-check*
 
