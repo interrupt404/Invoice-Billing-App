@@ -3,195 +3,234 @@ import {
   StyleSheet,
   Text,
   TextInput,
-
   View,
   ScrollView,
   Button,
   Alert,
+  TouchableOpacity,
+  FlatList,
 } from "react-native";
-import dateFormat, { masks } from "dateformat";
-import {Picker} from "@react-native-picker/picker";
+import dateFormat from "dateformat";
+import { Picker } from "@react-native-picker/picker";
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { PdfCode } from "../Components/PdfCode";
 import * as React from 'react';
 
-const CreateBill = () => {
-  const [name, set_Name] = useState("");
-  const [Address, Set_Address] = useState("");
-  const [Mobile_No, Set_Mobile_No] = useState("");
-  const [Quantity,setQuantity] = useState('');
-  const now = new Date();
-  const [Invoice,setInvoice] = useState(dateFormat(now, "ddmmyyhhMss")) 
-  const [Total,setTotal] = useState('');
-  const [ReceivedBalance,SetReceivedBalance] = useState('');
-  const [PaymentType,setPaymentType] = useState('Credit');
-  const [RemaningBalance, setRemaningBalance] = useState('Paid');
-  const [selectedPrinter, setSelectedPrinter] = React.useState();
-  const [ProductName, setProductName] = useState("Real Estate");
+const CreateBill = ({ navigation }) => {
+  const [lineItems, setLineItems] = useState([{ productName: '', quantity: '', price: '' }]);
+  const [address, setAddress] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [invoiceNo, setInvoiceNo] = useState(dateFormat(new Date(), "ddmmyyhhMss"));
+  const [total, setTotal] = useState('');
+  const [receivedBalance, setReceivedBalance] = useState('');
+  const [paymentType, setPaymentType] = useState('Credit');
+  const [remainingBalance, setRemainingBalance] = useState('Paid');
+  const [tax, setTax] = useState('');
+  const [discount, setDiscount] = useState('');
+  const [notes, setNotes] = useState('');
 
-  
-  const print = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html,
-      printerUrl: selectedPrinter?.url, // iOS only
-    });
-  }
+  const handleAddLineItem = () => {
+    setLineItems([...lineItems, { productName: '', quantity: '', price: '' }]);
+  };
+
+  const handleLineItemChange = (index, field, value) => {
+    const newLineItems = [...lineItems];
+    newLineItems[index][field] = value;
+    setLineItems(newLineItems);
+  };
+
+  const calculateTotal = () => {
+    // Calculate subtotal
+    let subtotal = lineItems.reduce((acc, item) => 
+        acc + (parseFloat(item.quantity || 0) * parseFloat(item.price || 0)), 0);
+
+    // Apply tax
+    let totalWithTax = subtotal + (parseFloat(tax) || 0);
+
+    // Apply discount
+    let totalWithDiscount = totalWithTax - (parseFloat(discount) || 0);
+
+    // Update total state
+    setTotal(totalWithDiscount.toFixed(2));
+};
+
 
   const printToFile = async () => {
-    let html = PdfCode(name,Address,Mobile_No,Quantity,Invoice,ProductName,Total,ReceivedBalance,PaymentType,RemaningBalance);
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    try{
-      const { uri } = await Print.printToFileAsync({
-        html
-      });
+    let html = PdfCode({
+      lineItems,
+      address,
+      mobileNo,
+      invoiceNo,
+      total,
+      receivedBalance,
+      paymentType,
+      remainingBalance,
+      tax,
+      discount,
+      notes
+    });
+    try {
+      const { uri } = await Print.printToFileAsync({ html });
       console.log('File has been saved to:', uri);
       await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
 
-      set_Name('');
-      setInvoice(dateFormat(now, "ddmmyyhhMss"));
+      // Pass data to Invoices screen
+      navigation.navigate('Invoices', {
+        address,
+        mobileNo,
+        invoiceNo,
+        total,
+        receivedBalance,
+        paymentType,
+        remainingBalance,
+        tax,
+        discount,
+        notes,
+        lineItems
+      });
+
+      // Reset form fields
+      setAddress('');
+      setMobileNo('');
+      setInvoiceNo(dateFormat(new Date(), "ddmmyyhhMss"));
       setTotal('');
-      setQuantity('');
-      SetReceivedBalance('');
-      Set_Address('');
-      Set_Mobile_No('');
-      
-
-    }catch(err){
-        Alert.alert("Make shure You have Internet Connection or contact @+91 8530730017");
+      setReceivedBalance('');
+      setRemainingBalance('Paid');
+      setTax('');
+      setDiscount('');
+      setNotes('');
+      setLineItems([{ productName: '', quantity: '', price: '' }]);
+    } catch (err) {
+      Alert.alert("Make sure you have an Internet Connection or contact @+91 8530730017");
     }
-
-
-  }
-
-  const selectPrinter = async () => {
-    const printer = await Print.selectPrinterAsync(); // iOS only
-    setSelectedPrinter(printer);
-  }
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.InputContainer}>
-          <Text>Name :</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => set_Name(text)}
-            value={name}
-            placeholder="Full Name"
-          />
+        {/* Line Items */}
+        <View style={styles.section}>
+          <Text>Line Items</Text>
+          {lineItems.map((item, index) => (
+            <View key={index} style={styles.lineItemContainer}>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(text) => handleLineItemChange(index, 'productName', text)}
+                value={item.productName}
+                placeholder="Product Name"
+              />
+              <TextInput
+                style={styles.textInput}
+                keyboardType="numeric"
+                onChangeText={(text) => handleLineItemChange(index, 'quantity', text)}
+                value={item.quantity}
+                placeholder="Quantity"
+                onEndEditing={calculateTotal}
+              />
+              <TextInput
+                style={styles.textInput}
+                keyboardType="numeric"
+                onChangeText={(text) => handleLineItemChange(index, 'price', text)}
+                value={item.price}
+                placeholder="Price"
+                onEndEditing={calculateTotal}
+              />
+            </View>
+          ))}
+          <TouchableOpacity style={styles.addButton} onPress={handleAddLineItem}>
+            <Text style={styles.addButtonText}>Add Line Item</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.InputContainer}>
-          <Text>Address : </Text>
+        {/* Additional Fields */}
+        <View style={styles.section}>
+          <Text>Address</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={(text) => Set_Address(text)}
-            value={Address}
+            onChangeText={setAddress}
+            value={address}
             placeholder="Address"
           />
-        </View>
-
-        <View style={styles.InputContainer}>
-          <Text>Mobile No : </Text>
+          <Text>Mobile No</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="number-pad"
-            onChangeText={(text) => Set_Mobile_No(text)}
-            value={Mobile_No}
+            onChangeText={setMobileNo}
+            value={mobileNo}
             placeholder="Mobile No"
           />
-        </View>
-
-        <View style={styles.InputContainer}>
-          <Text>Product Name : </Text>   
-          <TextInput
-            style={styles.textInput}//ADD MORE FIELDS FOR PRODUCT
-            onChangeText={(text) => setProductName(text)} // Set the product name
-            value={ProductName} // Bind to the state variable
-            placeholder="Product Name"
-          />
-        </View>
-        
-        
-        <View style={styles.InputContainer}>
-          <Text>Quantity : </Text>
+          <Text>Invoice No</Text>
           <TextInput
             style={styles.textInput}
-            keyboardType="numeric"
-            onChangeText={(text) => setQuantity(text)}
-            value={Quantity}
-            placeholder="Quantity"
-          />
-        </View>
-        <View style={styles.InputContainer}>
-          <Text>Invoice No : </Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => setInvoice(text)}
-            value={Invoice}
+            onChangeText={setInvoiceNo}
+            value={invoiceNo}
             placeholder="Invoice No"
           />
-        </View>
-        {/* Total  */}
-        <View style={styles.InputContainer}>
-          <Text>Total : </Text>
+          <Text>Tax</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
-            onChangeText={(text) => setTotal(text)}
-            value={Total}
-            placeholder="Total ₹"
+            onChangeText={(text) => { setTax(text); calculateTotal(); }}
+            value={tax}
+            placeholder="Tax ₹"
+          />
+          <Text>Discount</Text>
+          <TextInput
+            style={styles.textInput}
+            keyboardType="numeric"
+            onChangeText={(text) => { setDiscount(text); calculateTotal(); }}
+            value={discount}
+            placeholder="Discount ₹"
+          />
+          <Text>Notes</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={setNotes}
+            value={notes}
+            placeholder="Additional Notes"
           />
         </View>
 
-        {/* ReceivedBalance  */}
-        <View style={styles.InputContainer}>
-          <Text>Received Amount : </Text>
+        {/* Payment Details */}
+        <View style={styles.section}>
+          <Text>Payment Method</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={paymentType}
+              style={styles.picker}
+              onValueChange={(itemValue) => setPaymentType(itemValue)}
+            >
+              <Picker.Item label="Credit" value="Credit" />
+              <Picker.Item label="Cash" value="Cash" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
+          <Text>Received Amount</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
-            onChangeText={(text) => SetReceivedBalance(text)}
-            value={ReceivedBalance}
+            onChangeText={setReceivedBalance}
+            value={receivedBalance}
             placeholder="Received Amount ₹"
           />
-        </View>
-        {/* Remaining Balance  */}
-        <View style={styles.InputContainer}>
-          <Text>Remaining Balance : </Text>
+          <Text>Remaining Balance</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
-            onChangeText={(text) => setRemaningBalance(text)}
-            value={RemaningBalance}
+            onChangeText={setRemainingBalance}
+            value={remainingBalance}
             placeholder="Remaining Balance ₹"
           />
         </View>
-        {/* Payment Method  */}
-        <View style={styles.InputContainer}>
-            <Text>Payment Method : </Text>
-            <View style={styles.PickerContainer}>
-          <Picker
-            selectedValue={PaymentType}
-            style={styles.Picker}
-            onValueChange={(itemValue, itemIndex) => setPaymentType(itemValue)}
-          >
-          
-            <Picker.Item label="Credit" value="Credit" />
-            <Picker.Item label="Cash" value="Cash" />
-            <Picker.Item label="Other" value="Other" />
-          </Picker>
-        </View>
 
+        {/* Create Invoice Button */}
+        <View style={styles.createInvoiceButton}>
+          <Button
+            title="Create Invoice"
+            onPress={printToFile}
+          />
         </View>
-        <View style={styles.CreateInvoiceButton}>
-        <Button 
-        title="Create Invoice"
-        onPress={printToFile}
-        />
-        </View>
-        
       </ScrollView>
     </View>
   );
@@ -201,53 +240,51 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
   },
-  tinyLogo: {
-    width: 70,
-    height: 70,
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "lightblue",
-    padding: 10,
-    borderRadius: 4,
-  },
-  InputContainer: {
+  section: {
     marginTop: 15,
     marginLeft: 15,
     marginRight: 15,
   },
+  lineItemContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
   textInput: {
-    // width:100,
-    marginTop: 4,
+    flex: 1,
     height: 40,
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 4,
     padding: 4,
-    marginBottom:6
+    marginRight: 8,
   },
-  PickerContainer:{
-    marginTop:10,
-    borderWidth:1,
-    borderRadius:4,
-    height:50
-    
+  addButton: {
+    backgroundColor: "#0C7DE4",
+    padding: 10,
+    borderRadius: 7,
+    alignItems: 'center',
+    marginTop: 10,
   },
-  CreateInvoiceButton : {
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderRadius: 4,
+    height: 50,
+    marginTop: 10,
+  },
+  picker: {
+    height: 50,
+  },
+  createInvoiceButton: {
     marginTop: 15,
     marginLeft: 15,
     marginRight: 15,
-    marginBottom : 15
+    marginBottom: 15,
   },
-  spacer: {
-    height: 8
-  },
-  printer: {
-    textAlign: 'center',
-  }
 });
 
 export default CreateBill;

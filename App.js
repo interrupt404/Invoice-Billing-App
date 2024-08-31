@@ -22,6 +22,8 @@ import Home from "./App/Pages/Home";
 import Login from "./App/Pages/LoginScreen";
 import Invoices from "./App/Pages/Invoices";
 import CreateBill from "./App/Pages/CreatBill";
+import CreateFeeReceipt from "./App/Pages/CreateFeeReceipt";
+
 
 
 const Drawer = createDrawerNavigator();
@@ -183,6 +185,7 @@ function StackNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CreateBill" component={CreateBill} />
+      <Stack.Screen name="CreateFeeReceipt" component={CreateFeeReceipt} />
     </Stack.Navigator>
   );
 }
