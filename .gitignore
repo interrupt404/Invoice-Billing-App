@@ -17,6 +17,7 @@ web-build/
 *.mobileprovision
 
 # Android build artifacts
+/android
 /android/app/build/
 /android/.gradle/
 /android/build/
