@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+plugins {
+    id("com.facebook.react") version "0.72.4" // Adjust version to match your React Native version
+}
+
+rootProject.name = 'TempProject'
+include ':app'

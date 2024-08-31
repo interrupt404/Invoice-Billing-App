@@ -3,16 +3,24 @@ import { View, Text, StyleSheet, Switch } from 'react-native';
 
 const SettingsScreen = () => {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(false);
+  const [darkModeEnabled, setDarkModeEnabled] = React.useState(false); // Dark mode state
 
   const toggleNotifications = () => {
     setNotificationsEnabled(!notificationsEnabled);
   };
 
+  const toggleDarkMode = () => {
+    setDarkModeEnabled(!darkModeEnabled);
+  };
+
+  // Conditional styles based on dark mode
+  const dynamicStyles = darkModeEnabled ? darkStyles : lightStyles;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <Text style={[styles.title, dynamicStyles.text]}>Settings</Text>
       <View style={styles.optionContainer}>
-        <Text style={styles.optionText}>Enable Notifications</Text>
+        <Text style={[styles.optionText, dynamicStyles.text]}>Enable Notifications</Text>
         <Switch
           value={notificationsEnabled}
           onValueChange={toggleNotifications}
@@ -21,10 +29,10 @@ const SettingsScreen = () => {
         />
       </View>
       <View style={styles.optionContainer}>
-        <Text style={styles.optionText}>Dark Mode</Text>
+        <Text style={[styles.optionText, dynamicStyles.text]}>Dark1 Mode</Text>
         <Switch
-          value={false} // You can implement Dark Mode logic here
-          onValueChange={() => {}}
+          value={darkModeEnabled}
+          onValueChange={toggleDarkMode}
           thumbColor="#007BFF" // Blue thumb color
           trackColor={{ true: '#007BFF80', false: '#B0B0B0' }} // Blue when enabled, gray when disabled
         />
@@ -33,18 +41,17 @@ const SettingsScreen = () => {
   );
 };
 
+// Base styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 40,
-    backgroundColor: '#f2f2f2', // Light gray background
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#333', // Dark gray text color
   },
   optionContainer: {
     flexDirection: 'row',
@@ -54,7 +61,26 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 18,
+  },
+});
+
+// Light mode styles
+const lightStyles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f2f2f2', // Light gray background
+  },
+  text: {
     color: '#333', // Dark gray text color
+  },
+});
+
+// Dark mode styles
+const darkStyles = StyleSheet.create({
+  container: {
+    backgroundColor: '#1c1c1c', // Dark background
+  },
+  text: {
+    color: '#f2f2f2', // Light gray text color
   },
 });
 
