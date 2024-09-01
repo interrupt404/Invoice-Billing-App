@@ -1,13 +1,15 @@
-import dateFormat from "dateformat";
-
 function GetTime(date) {
-  let hours = parseInt(dateFormat(date, "hh"));
-  let minutes = parseInt(dateFormat(date, "MM"));
-  let ampm = hours >= 12 ? "AM" : "PM";
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? "0" + minutes : minutes;
   return hours + ":" + minutes + " " + ampm;
+}
+
+function GetDate(date) {
+  return date.toLocaleDateString('en-GB'); // Format as 'dd/mm/yyyy'
 }
 
 const PdfCode = ({
@@ -22,7 +24,8 @@ const PdfCode = ({
   remainingBalance,
   tax,
   discount,
-  notes
+  notes,
+  currency = "₹" // Default to ₹ if no currency symbol is provided
 }) => `
 <!DOCTYPE html>
 <html>
@@ -87,7 +90,7 @@ const PdfCode = ({
 <body>
   <div class="invoice-container">
     <div class="header">
-      Government of India
+      Netaji Subhas University of Technology
     </div>
     <div class="sub-header">
       e-Invoice
@@ -102,7 +105,7 @@ const PdfCode = ({
         Name: ${name} <br />
         Address: ${address} <br />
         Phone No: +91 ${mobileNo} <br />
-        Date: ${dateFormat(Date.now(), "dd-mm-yyyy")} <br />
+        Date: ${GetDate(new Date())} <br />
         Time: ${GetTime(new Date())}
       </p>
     </div>
@@ -113,7 +116,7 @@ const PdfCode = ({
       </div>
       <p>
         Invoice No: ${invoiceNo} <br />
-        Date: ${dateFormat(Date.now(), "dd-mm-yyyy")} <br />
+        Date: ${GetDate(new Date())} <br />
         Time: ${GetTime(new Date())} <br />
         Mobile No: <br />
         +91 8208553219 <br />
@@ -137,9 +140,9 @@ const PdfCode = ({
         <tr>
           <td>${index + 1}</td>
           <td>${item.productName}</td>
-          <td>${parseFloat(item.price).toFixed(2)}</td>
+          <td>${currency} ${parseFloat(item.price).toFixed(2)}</td>
           <td>${item.quantity}</td>
-          <td>₹ ${parseFloat(item.quantity * item.price).toFixed(2)}</td>
+          <td>${currency} ${parseFloat(item.quantity * item.price).toFixed(2)}</td>
         </tr>
         `).join('')}
       </table>
@@ -150,12 +153,12 @@ const PdfCode = ({
         Summary:
       </div>
       <p>
-        Subtotal: ₹ ${lineItems.reduce((acc, item) => acc + (parseFloat(item.quantity) * parseFloat(item.price)), 0).toFixed(2)} <br />
-        Tax: ₹ ${tax} <br />
-        Discount: ₹ ${discount} <br />
-        Total: ₹ ${total} <br />
-        Received Amount: ₹ ${receivedBalance} <br />
-        Remaining Balance: ₹ ${remainingBalance}
+        Subtotal: ${currency} ${lineItems.reduce((acc, item) => acc + (parseFloat(item.quantity) * parseFloat(item.price)), 0).toFixed(2)} <br />
+        Tax: ${currency} ${tax} <br />
+        Discount: ${currency} ${discount} <br />
+        Total: ${currency} ${total} <br />
+        Received Amount: ${currency} ${receivedBalance} <br />
+        Remaining Balance: ${currency} ${remainingBalance}
       </p>
     </div>
 

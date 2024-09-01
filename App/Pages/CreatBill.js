@@ -29,6 +29,7 @@ const CreateBill = ({ navigation }) => {
   const [tax, setTax] = useState('');
   const [discount, setDiscount] = useState('');
   const [notes, setNotes] = useState('');
+  const [currency, setCurrency] = useState('₹'); // Default currency set to INR
 
   const handleAddLineItem = () => {
     setLineItems([...lineItems, { productName: '', quantity: '', price: '' }]);
@@ -41,20 +42,15 @@ const CreateBill = ({ navigation }) => {
   };
 
   const calculateTotal = () => {
-    // Calculate subtotal
     let subtotal = lineItems.reduce((acc, item) => 
         acc + (parseFloat(item.quantity || 0) * parseFloat(item.price || 0)), 0);
 
-    // Apply tax
     let totalWithTax = subtotal + (parseFloat(tax) || 0);
 
-    // Apply discount
     let totalWithDiscount = totalWithTax - (parseFloat(discount) || 0);
 
-    // Update total state
     setTotal(totalWithDiscount.toFixed(2));
-};
-
+  };
 
   const printToFile = async () => {
     let html = PdfCode({
@@ -68,14 +64,14 @@ const CreateBill = ({ navigation }) => {
       remainingBalance,
       tax,
       discount,
-      notes
+      notes,
+      currency // Pass the selected currency
     });
     try {
       const { uri } = await Print.printToFileAsync({ html });
       console.log('File has been saved to:', uri);
       await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
 
-      // Pass data to Invoices screen
       navigation.navigate('Invoices', {
         address,
         mobileNo,
@@ -87,10 +83,10 @@ const CreateBill = ({ navigation }) => {
         tax,
         discount,
         notes,
-        lineItems
+        lineItems,
+        currency // Pass the selected currency
       });
 
-      // Reset form fields
       setAddress('');
       setMobileNo('');
       setInvoiceNo(dateFormat(new Date(), "ddmmyyhhMss"));
@@ -109,6 +105,23 @@ const CreateBill = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
+        {/* Currency Selection */}
+        <View style={styles.section}>
+          <Text>Select Currency</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={currency}
+              style={styles.picker}
+              onValueChange={(itemValue) => setCurrency(itemValue)}
+            >
+              <Picker.Item label="₹ - INR" value="₹" />
+              <Picker.Item label="$ - USD" value="$" />
+              <Picker.Item label="€ - EUR" value="€" />
+              <Picker.Item label="£ - GBP" value="£" />
+            </Picker>
+          </View>
+        </View>
+
         {/* Line Items */}
         <View style={styles.section}>
           <Text>Line Items</Text>
@@ -167,21 +180,21 @@ const CreateBill = ({ navigation }) => {
             value={invoiceNo}
             placeholder="Invoice No"
           />
-          <Text>Tax</Text>
+          <Text>Tax ({currency})</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
             onChangeText={(text) => { setTax(text); calculateTotal(); }}
             value={tax}
-            placeholder="Tax ₹"
+            placeholder={`Tax ${currency}`}
           />
-          <Text>Discount</Text>
+          <Text>Discount ({currency})</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
             onChangeText={(text) => { setDiscount(text); calculateTotal(); }}
             value={discount}
-            placeholder="Discount ₹"
+            placeholder={`Discount ${currency}`}
           />
           <Text>Notes</Text>
           <TextInput
@@ -206,21 +219,21 @@ const CreateBill = ({ navigation }) => {
               <Picker.Item label="Other" value="Other" />
             </Picker>
           </View>
-          <Text>Received Amount</Text>
+          <Text>Received Amount ({currency})</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
             onChangeText={setReceivedBalance}
             value={receivedBalance}
-            placeholder="Received Amount ₹"
+            placeholder={`Received Amount ${currency}`}
           />
-          <Text>Remaining Balance</Text>
+          <Text>Remaining Balance ({currency})</Text>
           <TextInput
             style={styles.textInput}
             keyboardType="numeric"
             onChangeText={setRemainingBalance}
             value={remainingBalance}
-            placeholder="Remaining Balance ₹"
+            placeholder={`Remaining Balance ${currency}`}
           />
         </View>
 
@@ -274,17 +287,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     height: 50,
-    marginTop: 10,
+    justifyContent: "center",
   },
   picker: {
+    width: "100%",
     height: 50,
   },
   createInvoiceButton: {
-    marginTop: 15,
+    marginTop: 20,
     marginLeft: 15,
     marginRight: 15,
     marginBottom: 15,
-  },
+  }
 });
 
 export default CreateBill;
