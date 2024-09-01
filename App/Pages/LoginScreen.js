@@ -1,16 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
+
+  const handleLogin = (role) => {
+    navigation.navigate('LoginForm', { role });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, styles.googleButton]}>
-          <Text style={styles.buttonText}>Google Sign-In</Text>
+        <TouchableOpacity 
+          style={[styles.button, styles.adminButton]} 
+          onPress={() => handleLogin('admin')}
+        >
+          <Text style={styles.buttonText}>Login as Administrator</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.emailButton]}>
-          <Text style={styles.buttonText}>Email/Password</Text>
+        <TouchableOpacity 
+          style={[styles.button, styles.financeButton]} 
+          onPress={() => handleLogin('finance')}
+        >
+          <Text style={styles.buttonText}>Login as Finance Officer</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.button, styles.departmentButton]} 
+          onPress={() => handleLogin('department')}
+        >
+          <Text style={styles.buttonText}>Login as Department Head</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -22,35 +41,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f8f9fa', // Light gray background
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'blue', // Blue color
+    marginBottom: 40,
+    color: '#343a40', // Dark gray color
   },
   buttonContainer: {
     alignItems: 'center',
   },
   button: {
-    width: 200,
-    height: 40,
-    borderRadius: 5,
+    width: 250,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8,
   },
-  googleButton: {
-    backgroundColor: '#0C7DE4', // Blue color
-    elevation:8,
+  adminButton: {
+    backgroundColor: '#007bff', // Blue color
   },
-  emailButton: {
-    backgroundColor: '#0C7DE4', // Blue color
-    elevation:8,
+  financeButton: {
+    backgroundColor: '#28a745', // Green color
+  },
+  departmentButton: {
+    backgroundColor: '#6f42c1', // Purple color
   },
   buttonText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 

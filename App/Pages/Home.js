@@ -1,7 +1,6 @@
 import { View, Text, Button, StyleSheet, FlatList, Dimensions } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native'; // Import navigation hook
-import LoginScreen from './LoginScreen';
 import { LineChart, BarChart } from 'react-native-chart-kit'; // Import chart components
 
 const transactions = [
@@ -25,6 +24,14 @@ const notifications = [
   'Sports fee collection starts next week.'
 ];
 
+const pendingApprovals = [
+  'Approve research grant application.',
+  'Review vendor payment request.',
+  'Approve tuition fee adjustments.',
+  'Verify overdue library fees.',
+  'Approve new sports fee collection.'
+];
+
 const renderTransaction = ({ item }) => (
   <View style={styles.transaction}>
     <Text style={styles.transactionDate}>Date: {item.date}</Text>
@@ -34,19 +41,18 @@ const renderTransaction = ({ item }) => (
     <Text style={styles.transactionAmount}>Amount: {item.amount}</Text>
   </View>
 );
-const renderPendingApproval = ({ item }) => (
+
+const renderNotification = ({ item }) => (
   <Text style={styles.notification}>• {item}</Text>
 );
 
-const renderNotification = ({ item }) => (
+const renderPendingApproval = ({ item }) => (
   <Text style={styles.notification}>• {item}</Text>
 );
 
 const renderChart = () => (
   <View style={styles.card}>
     <Text style={styles.cardTitle}>Financial Insights</Text>
-
-    {/* Sample Line Chart */}
     <LineChart
       data={{
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -70,7 +76,6 @@ const renderChart = () => (
       style={{ marginVertical: 8, borderRadius: 16 }}
     />
 
-    {/* Sample Bar Chart */}
     <BarChart
       data={{
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -97,15 +102,6 @@ const renderChart = () => (
 
 export default function Home() {
   const navigation = useNavigation(); // Use the navigation hook to get the navigation prop
-
-  // Data for FlatList
-  const pendingApprovals = [
-    'Approve research grant application.',
-    'Review vendor payment request.',
-    'Approve tuition fee adjustments.',
-    'Verify overdue library fees.',
-    'Approve new sports fee collection.'
-  ];
   
   const data = [
     { key: 'title', title: 'Dashboard Overview' },
@@ -115,7 +111,6 @@ export default function Home() {
     { key: 'charts', renderItem: renderChart },
     { key: 'pending', title: 'Pending Approvals', data: pendingApprovals, renderItem: renderPendingApproval }
   ];
-  
 
   const renderItem = ({ item }) => {
     switch (item.key) {
@@ -142,7 +137,6 @@ export default function Home() {
           <View style={styles.actions}>
             <Button title="Create New Invoice" onPress={() => navigation.navigate('Invoices')} />
             <View style={styles.buttonSpacing} />
-            <Button title="View Recent Transactions" onPress={() => { /* Handle Action */ }} />
           </View>
         );
       case 'charts':
@@ -151,14 +145,12 @@ export default function Home() {
         return null;
     }
   };
-  
 
   return (
     <FlatList
       data={data}
       renderItem={renderItem}
       keyExtractor={(item) => item.key}
-      ListFooterComponent={<View style={styles.footer}><LoginScreen /></View>}
       contentContainerStyle={styles.scrollContainer}
     />
   );

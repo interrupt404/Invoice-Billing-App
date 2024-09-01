@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 30,
     borderWidth: 2,
-    borderColor: 'blue', // Sky blue border color for non-selected stars
+    borderColor: 'white', // Sky blue border color for non-selected stars
     backgroundColor: '#fff', // White background for non-selected stars
   },
   buttonText: {
