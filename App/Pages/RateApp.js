@@ -52,7 +52,7 @@ const RateApp = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Rating Section */}
       <View style={styles.ratingSection}>
-        <Text style={styles.title}>Rate Our App</Text>
+        {/* <Text style={styles.title}>Rate Our App</Text> */}
         {showForm ? (
           <View style={styles.formContainer}>
             <Text style={styles.formTitle}>Feedback Form</Text>
