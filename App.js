@@ -22,6 +22,7 @@ import CreateBill from "./App/Pages/CreatBill";
 import CreateFeeReceipt from "./App/Pages/CreateFeeReceipt";
 import LoginForm from "./App/Pages/LoginForm";
 import Analytics from "./App/Pages/Analytics"; // Import the Analytics component
+import VendorManagement from './App/Pages/VendorManagement';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -139,6 +140,17 @@ function TabNavigator() {
           ),
         }}
       />
+               <Drawer.Screen
+  name="Vendor Management"
+  options={{
+    drawerLabel: "Vendor Management",
+    title: "Vendor Management",
+    drawerIcon: () => (
+      <MaterialCommunityIcons name="account-group" size={20} color="#808080" />
+    ),
+  }}
+  component={VendorManagement}
+/>
       <Drawer.Screen
         name="Contact"
         component={Contact}
