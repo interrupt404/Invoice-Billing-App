@@ -62,7 +62,13 @@ This project is about developing a robust Invoice and Billing Platform tailored 
    npm install
    ```
 
-3. Run the application:
+3. Start the application with Expo:
+
+   ```bash
+   npx expo start
+   ```
+
+4. Alternatively, you can run the application directly on Android or iOS:
 
    ```bash
    npm run android    # For Android
@@ -72,3 +78,5 @@ This project is about developing a robust Invoice and Billing Platform tailored 
 ## Conclusion
 
 The Invoice and Billing Platform for Government Universities is a comprehensive solution designed to meet the financial management needs of government educational institutions. By focusing on improved user experience, enhanced performance, and robust security, this platform ensures that financial transactions are handled efficiently and securely. The responsive mobile UI/UX and support for multi-currency and tax compliance make this platform a versatile tool for managing complex financial operations in a university setting. The successful implementation of this project demonstrates the potential for modern technology to improve and streamline administrative processes in government institutions.
+
+--- 
