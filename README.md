@@ -6,18 +6,18 @@ This project is about developing a robust Invoice and Billing Platform tailored 
 
 ## Team Details
 
-**Team Name:** The CodeFather
+**Team Name:** Neon Nexus
 
 **Team Leader:** [@interrupt404](https://github.com/interrupt404)
 
 **Team Members:**
 
-- *MEMBER_1* - 2021UCI8055 - [@interrupt404](https://github.com/interrupt404)
-- *MEMBER_2* - 2021UCI8002 - [@alpha2lucifer](https://github.com/alpha2lucifer)
-- *MEMBER_3* - 2021UCI8001 - [@utkarshanand07](https://github.com/utkarshanand07)
-- *MEMBER_4* - 2021UCI8025 - [@Makkohli](https://github.com/Makkohli)
-- *MEMBER_5* - 2023UEA7645 - [@arpita-sinhaa](https://github.com/arpita-sinhaa)
-- *MEMBER_6* - 2021UCI8027 - [@SeineAle](https://github.com/SeineAle)
+- *Rajat Raj* - 2021UCI8055 - [@interrupt404](https://github.com/interrupt404)
+- *Chandan* - 2021UCI8002 - [@alpha2lucifer](https://github.com/alpha2lucifer)
+- *Utkarsh Anand* - 2021UCI8001 - [@utkarshanand07](https://github.com/utkarshanand07)
+- *Manish Kumar Kohli* - 2021UCI8025 - [@Makkohli](https://github.com/Makkohli)
+- *Arpita Sinha* - 2023UEA7645 - [@arpita-sinhaa](https://github.com/arpita-sinhaa)
+- *Paras Jain* - 2021UCI8027 - [@SeineAle](https://github.com/SeineAle)
 
 ## Project Links
 
