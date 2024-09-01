@@ -21,6 +21,7 @@ import Invoices from "./App/Pages/Invoices";
 import CreateBill from "./App/Pages/CreatBill";
 import CreateFeeReceipt from "./App/Pages/CreateFeeReceipt";
 import LoginForm from "./App/Pages/LoginForm";
+import Analytics from "./App/Pages/Analytics"; // Import the Analytics component
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -102,6 +103,17 @@ function TabNavigator() {
           title: "Settings",
           drawerIcon: () => (
             <SimpleLineIcons name="settings" size={20} color="#808080" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Analytics" // Add Analytics here
+        component={Analytics}
+        options={{
+          drawerLabel: "Analytics",
+          title: "Analytics",
+          drawerIcon: () => (
+            <MaterialIcons name="analytics" size={20} color="#808080" />
           ),
         }}
       />
