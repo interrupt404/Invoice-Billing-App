@@ -1,12 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 
 const ContactScreen = ({ darkModeEnabled }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
   const dynamicStyles = darkModeEnabled ? darkStyles : lightStyles;
+
+  const handleSendMessage = () => {
+    setModalVisible(true);
+    // Logic to send email can be added here
+  };
 
   return (
     <View style={[styles.container, dynamicStyles.container]}>
       <Text style={[styles.title, dynamicStyles.text]}>Contact Us</Text>
+
       <View style={styles.contactInfo}>
         <Text style={[styles.infoLabel, dynamicStyles.subText]}>Email:</Text>
         <Text style={[styles.infoText, dynamicStyles.text]}>contact@example.com</Text>
@@ -15,9 +26,49 @@ const ContactScreen = ({ darkModeEnabled }) => {
         <Text style={[styles.infoLabel, dynamicStyles.subText]}>Phone:</Text>
         <Text style={[styles.infoText, dynamicStyles.text]}>+91 123457891</Text>
       </View>
-      <TouchableOpacity style={[styles.contactButton, dynamicStyles.button]}>
+
+      <TextInput
+        style={[styles.input, dynamicStyles.input]}
+        placeholder="Your Name"
+        placeholderTextColor={dynamicStyles.placeholder.color}
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={[styles.input, dynamicStyles.input]}
+        placeholder="Your Email"
+        placeholderTextColor={dynamicStyles.placeholder.color}
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={[styles.textArea, dynamicStyles.input]}
+        placeholder="Your Message"
+        placeholderTextColor={dynamicStyles.placeholder.color}
+        value={message}
+        onChangeText={setMessage}
+        multiline
+      />
+
+      <TouchableOpacity style={[styles.contactButton, dynamicStyles.button]} onPress={handleSendMessage}>
         <Text style={styles.buttonText}>Send Message</Text>
       </TouchableOpacity>
+
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={[styles.modalContainer, dynamicStyles.modal]}>
+            <Text style={[styles.modalText, dynamicStyles.text]}>Message sent!</Text>
+            <TouchableOpacity style={[styles.closeButton, dynamicStyles.button]} onPress={() => setModalVisible(false)}>
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -25,6 +76,7 @@ const ContactScreen = ({ darkModeEnabled }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -46,6 +98,24 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 18,
   },
+  input: {
+    width: '100%',
+    padding: 15,
+    borderRadius: 8,
+    marginVertical: 10,
+    fontSize: 16,
+  },
+  textArea: {
+    height: 120, // Increase the height to make it bigger
+    width:340,
+    textAlignVertical: 'top', // Ensure text starts from the top
+    padding: 15, // Optional: Adjust padding for more space inside
+    borderRadius: 8,
+    fontSize: 16,
+    backgroundColor: '#fff', // You can customize background color as needed
+    borderColor: '#ccc', // Border color for light mode
+    borderWidth: 1,
+  },
   contactButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -57,6 +127,29 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: 300,
+    padding: 20,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  closeButton: {
+    marginTop: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
   },
 });
 
@@ -73,6 +166,17 @@ const lightStyles = StyleSheet.create({
   button: {
     backgroundColor: '#007BFF', // Blue button
   },
+  input: {
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+    borderWidth: 1,
+  },
+  placeholder: {
+    color: '#888',
+  },
+  modal: {
+    backgroundColor: '#fff',
+  },
 });
 
 const darkStyles = StyleSheet.create({
@@ -87,6 +191,17 @@ const darkStyles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#0056b3', // Darker blue button
+  },
+  input: {
+    backgroundColor: '#444',
+    borderColor: '#555',
+    borderWidth: 1,
+  },
+  placeholder: {
+    color: '#bbb',
+  },
+  modal: {
+    backgroundColor: '#444',
   },
 });
 
