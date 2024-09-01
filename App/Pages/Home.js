@@ -4,17 +4,18 @@ import { useNavigation } from '@react-navigation/native'; // Import navigation h
 import { LineChart, BarChart } from 'react-native-chart-kit'; // Import chart components
 
 const transactions = [
-  { date: '2024-09-01', name: 'John Doe', rollNo: '123456', type: 'Tuition Fee', amount: '$2000' },
-  { date: '2024-08-30', name: 'Jane Smith', rollNo: '789012', type: 'Mess Fee', amount: '$150' },
-  { date: '2024-08-29', name: 'Alice Johnson', rollNo: '345678', type: 'Hostel Fee', amount: '$500' },
-  { date: '2024-08-28', name: 'Bob Brown', rollNo: '234567', type: 'Library Fee', amount: '$75' },
-  { date: '2024-08-27', name: 'Emily Davis', rollNo: '345678', type: 'Sports Fee', amount: '$100' },
-  { date: '2024-08-26', name: 'Chris Evans', rollNo: '654321', type: 'Exam Fee', amount: '$250' },
-  { date: '2024-08-25', name: 'Natalie Portman', rollNo: '123987', type: 'Lab Fee', amount: '$120' },
-  { date: '2024-08-24', name: 'Robert Downey', rollNo: '741852', type: 'Transportation Fee', amount: '$80' },
-  { date: '2024-08-23', name: 'Scarlett Johansson', rollNo: '963852', type: 'Tuition Fee', amount: '$2000' },
-  { date: '2024-08-22', name: 'Tom Hanks', rollNo: '321654', type: 'Hostel Fee', amount: '$500' }
+  { date: '2024-09-01', name: 'AARAV PATEL', rollNo: 'ABC123', type: 'Tuition Fee', amount: '₹15,000' },
+  { date: '2024-08-30', name: 'SOPHIA VERMA', rollNo: 'XYZ456', type: 'Mess Fee', amount: '₹1,500' },
+  { date: '2024-08-29', name: 'RAVI SHARMA', rollNo: 'LMN789', type: 'Hostel Fee', amount: '₹5,000' },
+  { date: '2024-08-28', name: 'PRIYA NAIR', rollNo: 'OPQ012', type: 'Library Fee', amount: '₹1,200' },
+  { date: '2024-08-27', name: 'VIJAY KUMAR', rollNo: 'RST345', type: 'Sports Fee', amount: '₹2,500' },
+  { date: '2024-08-26', name: 'ANITA MEHRA', rollNo: 'UVW678', type: 'Exam Fee', amount: '₹3,000' },
+  { date: '2024-08-25', name: 'RAHUL SINGH', rollNo: 'IJK901', type: 'Lab Fee', amount: '₹1,500' },
+  { date: '2024-08-24', name: 'RANI CHAUHAN', rollNo: 'DEF234', type: 'Transportation Fee', amount: '₹1,800' },
+  { date: '2024-08-23', name: 'MAYANK SINGH', rollNo: 'GHI567', type: 'Tuition Fee', amount: '₹20,000' },
+  { date: '2024-08-22', name: 'KIRAN KAPOOR', rollNo: 'JKL890', type: 'Hostel Fee', amount: '₹6,000' }
 ];
+
 
 const notifications = [
   'New research grant application received.',
