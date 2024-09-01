@@ -1,7 +1,5 @@
-// App/Pages/VendorManagement.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const VendorManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,7 +79,8 @@ const VendorManagement = () => {
         onChangeText={handleSearch}
         style={styles.searchInput}
       />
-      <Button title="Add New Vendor" />
+      <Button title="Add New Vendor" style={styles.addButton} />
+      
       {filteredVendors.map((vendor) => (
         <View key={vendor.id} style={styles.card}>
           <Text style={styles.cardHeader}>{vendor.name}</Text>
@@ -111,10 +110,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
   },
+  addButton: {
+    marginBottom: 14, 
+  },
   card: {
     backgroundColor: 'white',
     padding: 16,
     marginBottom: 16,
+    marginTop:10,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.25,

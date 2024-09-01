@@ -29,7 +29,7 @@ const SettingsScreen = () => {
         />
       </View>
       <View style={styles.optionContainer}>
-        <Text style={[styles.optionText, dynamicStyles.text]}>Dark1 Mode</Text>
+        <Text style={[styles.optionText, dynamicStyles.text]}>Dark Mode</Text>
         <Switch
           value={darkModeEnabled}
           onValueChange={toggleDarkMode}
