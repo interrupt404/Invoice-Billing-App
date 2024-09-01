@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { View, Text, Image } from "react-native";
+import { View, Text } from "react-native";
 import {
   SimpleLineIcons,
   MaterialIcons,
@@ -8,10 +8,7 @@ import {
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  DrawerItemList,
-  createDrawerNavigator,
-} from "@react-navigation/drawer";
+import { createDrawerNavigator, DrawerItemList } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Backups from "./App/Components/Backups";
@@ -19,12 +16,11 @@ import Contact from "./App/Components/Contact";
 import RateApp from "./App/Pages/RateApp";
 import Settings from "./App/Components/Settings";
 import Home from "./App/Pages/Home";
-import Login from "./App/Pages/LoginScreen";
+import LoginScreen from "./App/Pages/LoginScreen";
 import Invoices from "./App/Pages/Invoices";
 import CreateBill from "./App/Pages/CreatBill";
 import CreateFeeReceipt from "./App/Pages/CreateFeeReceipt";
-
-
+import LoginForm from "./App/Pages/LoginForm";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,51 +28,42 @@ const Stack = createNativeStackNavigator();
 function TabNavigator() {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => {
-        return (
-          <SafeAreaView>
-            <View
+      drawerContent={(props) => (
+        <SafeAreaView>
+          <View
+            style={{
+              height: 200,
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              borderBottomColor: "#f4f4f4",
+              borderBottomWidth: 1,
+            }}
+          >
+            <Text
               style={{
-                height: 200,
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                borderBottomColor: "#f4f4f4",
-                borderBottomWidth: 1,
+                fontSize: 22,
+                marginVertical: 6,
+                fontWeight: "bold",
+                color: "#111",
               }}
             >
-              <Text
-                style={{
-                  fontSize: 22,
-                  marginVertical: 6,
-                  fontWeight: "bold",
-                  color: "#111",
-                }}
-              >
-                YourBiller
-              </Text>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "#111",
-                }}
-              >
-                Welcome!
-              </Text>
-            </View>
-            <DrawerItemList {...props} />
-          </SafeAreaView>
-        );
-      }}
+              YourBiller
+            </Text>
+            <Text style={{ fontSize: 16, color: "#111" }}>Welcome!</Text>
+          </View>
+          <DrawerItemList {...props} />
+        </SafeAreaView>
+      )}
       screenOptions={{
         drawerStyle: {
-          backgroundColor: "#fff", //drawer ka background
+          backgroundColor: "#fff",
           width: 250,
         },
         headerStyle: {
-          backgroundColor: "#0C7DE4", //header ka color
+          backgroundColor: "#0C7DE4",
         },
-        headerTintColor: "#fff", //top name of header
+        headerTintColor: "#fff",
         headerTitleStyle: {
           fontWeight: "bold",
         },
@@ -86,7 +73,8 @@ function TabNavigator() {
       }}
     >
       <Drawer.Screen
-        name="Home"
+        name="HomeDrawer"
+        component={Home}
         options={{
           drawerLabel: "Home",
           title: "Home",
@@ -94,11 +82,10 @@ function TabNavigator() {
             <SimpleLineIcons name="home" size={20} color="#808080" />
           ),
         }}
-        component={Home}
       />
-
       <Drawer.Screen
         name="Invoices"
+        component={Invoices}
         options={{
           drawerLabel: "Invoice",
           title: "Invoice",
@@ -106,23 +93,10 @@ function TabNavigator() {
             <SimpleLineIcons name="book-open" size={20} color="#808080" />
           ),
         }}
-        component={StackNavigator}
       />
-
-      <Drawer.Screen
-        name="Login"
-        options={{
-          drawerLabel: "Login",
-          title: "Login",
-          drawerIcon: () => (
-            <SimpleLineIcons name="login" size={20} color="#808080" />
-          ),
-        }}
-        component={Login}
-      />
-
       <Drawer.Screen
         name="Settings"
+        component={Settings}
         options={{
           drawerLabel: "Settings",
           title: "Settings",
@@ -130,11 +104,10 @@ function TabNavigator() {
             <SimpleLineIcons name="settings" size={20} color="#808080" />
           ),
         }}
-        component={Settings}
       />
-
       <Drawer.Screen
         name="Backups"
+        component={Backups}
         options={{
           drawerLabel: "Backups",
           title: "Backups",
@@ -142,11 +115,10 @@ function TabNavigator() {
             <MaterialIcons name="backup" size={20} color="#808080" />
           ),
         }}
-        component={Backups}
       />
-
       <Drawer.Screen
         name="Rate this App"
+        component={RateApp}
         options={{
           drawerLabel: "Rate this App",
           title: "Rate this App",
@@ -154,11 +126,10 @@ function TabNavigator() {
             <FontAwesome name="star" size={20} color="#808080" />
           ),
         }}
-        component={RateApp}
       />
-
       <Drawer.Screen
         name="Contact"
+        component={Contact}
         options={{
           drawerLabel: "Contact",
           title: "Contact",
@@ -170,7 +141,6 @@ function TabNavigator() {
             />
           ),
         }}
-        component={Contact}
       />
     </Drawer.Navigator>
   );
@@ -178,14 +148,20 @@ function TabNavigator() {
 
 function StackNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="LoginScreen">
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="HomeScreen"
-        component={Invoices}
+        component={TabNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CreateBill" component={CreateBill} />
       <Stack.Screen name="CreateFeeReceipt" component={CreateFeeReceipt} />
+      <Stack.Screen name="LoginForm" component={LoginForm} />
     </Stack.Navigator>
   );
 }
@@ -193,7 +169,7 @@ function StackNavigator() {
 export default function App() {
   return (
     <NavigationContainer>
-      <TabNavigator />
+      <StackNavigator />
     </NavigationContainer>
   );
 }
