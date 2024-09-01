@@ -4,6 +4,30 @@
 
 This project is about developing a robust Invoice and Billing Platform tailored for Government Universities. The platform is designed to efficiently manage a wide range of financial transactions, including tuition fees, research grants, and vendor payments. It focuses on delivering a seamless user experience, enhanced performance, and improved maintainability, ensuring that the platform meets the complex financial management needs of government educational institutions.
 
+## Team Details
+
+**Team Name:** The CodeFather
+
+**Team Leader:** [@interrupt404](https://github.com/interrupt404)
+
+**Team Members:**
+
+- *MEMBER_1* - 2021UCI8055 - [@interrupt404](https://github.com/interrupt404)
+- *MEMBER_2* - 2021UCI8002 - [@alpha2lucifer](https://github.com/alpha2lucifer)
+- *MEMBER_3* - 2021UCI8001 - [@utkarshanand07](https://github.com/utkarshanand07)
+- *MEMBER_4* - 2021UCI8025 - [@Makkohli](https://github.com/Makkohli)
+- *MEMBER_5* - 2023UEA7645 - [@arpita-sinhaa](https://github.com/arpita-sinhaa)
+- *MEMBER_6* - 2021UCI8027 - [@SeineAle](https://github.com/SeineAle)
+
+## Project Links
+
+- **Internal Presentation:** [Internal Presentation](URL TO PPT UPLOADED TO GITHUB)
+- **Final SIH Presentation:** [Final SIH Presentation](URL TO PPT UPLOADED TO GITHUB)
+- **Video Demonstration:** [Watch Video](UNLISTED YOUTUBE LINK)
+- **Live Deployment:** [View Deployment](DEPLOYED LINK IF ANY)
+- **Source Code:** [GitHub Repository](GITHUB LINK TO THE REPO)
+- **Additional Resources:** [Other Relevant Links](ANY OTHER RELEVANT LINKS)
+
 ## Key Features
 
 ### 1. User Roles & Access Control
